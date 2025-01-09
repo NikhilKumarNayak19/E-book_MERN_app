@@ -4,6 +4,7 @@ import userModel from '../models/userModel.js';
 import transporter from '../config/nodemailer.js';
 import mongoose from 'mongoose';
 
+
 export const register = async (req, res) => {
     const { name, email, password, isAdmin } = req.body;
 
@@ -88,7 +89,9 @@ export const login = async (req, res) => {
             maxAge: 7*24*60*60*1000
         });
 
-        return res.json({success: true, message: "Login Successful"});
+        return res.json({success: true, 
+            message: "Login Successful",
+            userdata:{id: user._id,}});
 
     }catch(error){
         return res.json({success: false, message: error.message});
