@@ -11,16 +11,20 @@ const userSchema = new mongoose.Schema(
         isAdmin: { type: Boolean, default: false },
         resetOtp: { type: String, default: "" },
         resetOtpExpireAt: { type: Number, default: 0 },
-        readLater: {
-            type: mongoose.Types.ObjectId,
-            default: null, // Corrected default value
-            ref: "resources",
-        },
-        history: {
-            type: mongoose.Types.ObjectId,
-            default: null, // Corrected default value
-            ref: "resources",
-        },
+        readLater: [
+            {
+                type: mongoose.Schema.Types.ObjectId, // Array of ObjectId references
+                ref: "resource",
+                default: [], // Initialize as an empty array
+            },
+        ],
+        history: [
+            {
+                type: mongoose.Schema.Types.ObjectId, // Array of ObjectId references
+                ref: "resource",
+                default: [], // Initialize as an empty array
+            },
+        ],
         avatar: {
             type: String,
             default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
@@ -29,6 +33,6 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const userModel = mongoose.model.user || mongoose.model("user", userSchema);
+const userModel = mongoose.models.user || mongoose.model("user", userSchema);
 
 export default userModel;
