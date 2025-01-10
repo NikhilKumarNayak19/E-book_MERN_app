@@ -6,7 +6,7 @@ const readLaterRouter = express.Router();
 
 readLaterRouter.put('/add-resource-to-read-later', userAuth, addReadLater)
 readLaterRouter.post('/delete-resource-from-read-later', userAuth, deleteFromReadLater)
-readLaterRouter.post('/fetch-all-resource-from-read-later', userAuth, getReadLater )
+readLaterRouter.get('/fetch-all-resource-from-read-later', userAuth, getReadLater )
 
 
 

@@ -3,6 +3,7 @@ import userModel from "../models/userModel.js"; // Updated import
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
+
 // Add resource --admin
 export const addResource = async (req, res) => {
     try {
@@ -30,30 +31,45 @@ export const addResource = async (req, res) => {
             return res.status(403).json({ message: "You are not authorized to add resources" });
         }
 
+        // Validate request body
+        const { link, title, desc, author, category, type, image } = req.body;
+
+        if (!link || !title || !desc || !author || !category || !type || !image) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
         // Check for duplicate resource
-        const existingResource = await resourceModel.findOne({ url: req.body.link });
+        const existingResource = await resourceModel.findOne({ url: link });
         if (existingResource) {
             return res.status(400).json({ message: "This resource already exists" });
         }
 
         // Add the resource
         const resource = new resourceModel({
-            url: req.body.link,
-            title: req.body.title,
-            desc: req.body.desc,
-            author: req.body.author,
-            category: req.body.category,
-            type: req.body.type,
-            image: req.body.image,
+            url: link,
+            title,
+            desc,
+            author,
+            category,
+            type,
+            image,
         });
 
         await resource.save();
-        res.status(200).json({ message: "Resource added successfully" });
+
+        return res.status(201).json({ message: "Resource added successfully", resource });
     } catch (error) {
+        console.error("Error adding resource:", error.message);
+
         if (error.name === "JsonWebTokenError") {
             return res.status(401).json({ message: "Invalid token. Please log in again." });
         }
-        res.status(500).json({ message: error.message });
+
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "Token expired. Please log in again." });
+        }
+
+        return res.status(500).json({ message: "An error occurred while adding the resource", error: error.message });
     }
 };
 
@@ -152,6 +168,8 @@ export const deleteResource = async (req, res) => {
 
         // Extract the resource ID from the headers
         const resourceId = req.headers["resource-id"];
+        console.log("Resource ID received:", resourceId);
+
         if (!resourceId || !mongoose.Types.ObjectId.isValid(resourceId)) {
             return res.status(400).json({ message: "Invalid Resource ID" });
         }
@@ -167,12 +185,15 @@ export const deleteResource = async (req, res) => {
 
         res.status(200).json({ message: "Resource deleted successfully" });
     } catch (error) {
+        console.error("Error in deleteResource:", error.message);
+
         if (error.name === "JsonWebTokenError") {
             return res.status(401).json({ message: "Invalid token. Please log in again." });
         }
         res.status(500).json({ message: error.message });
     }
 };
+
 
 
 //get all books

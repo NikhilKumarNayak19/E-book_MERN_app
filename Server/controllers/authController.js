@@ -4,7 +4,7 @@ import userModel from '../models/userModel.js';
 import transporter from '../config/nodemailer.js';
 import mongoose from 'mongoose';
 
-
+// Register
 export const register = async (req, res) => {
     const { name, email, password, isAdmin } = req.body;
 
@@ -20,156 +20,134 @@ export const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Dynamically set isAdmin, default to false if not provided
+        // Set default isAdmin to false if not provided
         const user = new userModel({
             name,
             email,
             password: hashedPassword,
-            isAdmin: isAdmin === true // Explicitly check for boolean true
+            isAdmin: isAdmin === true, // Explicitly set to false if not true
         });
 
         await user.save();
 
         const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-        // Conditional email template based on isAdmin
-        let mailOptions;
+        // Email template
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: email,
+            subject: user.isAdmin ? "Welcome Admin to E-book!" : "Welcome to E-book!",
+            text: `Hello ${name},\n\nWelcome to the E-book platform${user.isAdmin ? " as an Admin" : ""}! You have successfully registered with the email: ${email}. We're excited to have you on board.\n\nBest Regards,\nE-book Team`,
+        };
 
-        if (user.isAdmin) {
-            mailOptions = {
-                from: process.env.SENDER_EMAIL,
-                to: email,
-                subject: "Welcome Admin to E-book!",
-                text: `Hello ${name},\n\nWelcome to the E-book platform as an Admin! You have successfully registered with the email: ${email}. We're excited to have you on board.\n\nBest Regards,\nE-book Team`
-            };
-        } else {
-            mailOptions = {
-                from: process.env.SENDER_EMAIL,
-                to: email,
-                subject: "Welcome to E-book!",
-                text: `Hello ${name},\n\nWelcome to the E-book platform! You have successfully registered with the email: ${email}. We're glad to have you here.\n\nBest Regards,\nE-book Team`
-            };
-        }
-
-        // Send the email
+        // Send email
         try {
             await transporter.sendMail(mailOptions);
             console.log('Email sent successfully');
         } catch (error) {
-            console.error('Error sending email:', error);
+            console.error('Error sending email:', error.message);
+            return res.json({ success: false, message: "Registration successful, but email sending failed." });
         }
 
         return res.json({ success: true, message: "User registered successfully", token });
     } catch (error) {
-        return res.json({ success: false, message: "Error in registration", error });
+        console.error("Error during registration:", error.message);
+        return res.json({ success: false, message: "Error in registration", error: error.message });
     }
 };
 
-//Login
+// Login
 export const login = async (req, res) => {
-    const {email, password} = req.body;
-    if(!email || !password){
-        return res.json({success: false, message: "Email and Password are required"});
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.json({ success: false, message: "Email and Password are required" });
     }
-    try{
-        const user = await userModel.findOne({email});
-        if(!user){
-            return res.json({success: false, message: "Invalid Email or Password"});
-        }
-        const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-            return res.json({success: false, message: "Invalid Email or Password"});
+
+    try {
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "Invalid Email or Password" });
         }
 
-        const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, {expiresIn: "7d"});
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.json({ success: false, message: "Invalid Email or Password" });
+        }
+
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-            maxAge: 7*24*60*60*1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
-        return res.json({success: true, 
-            message: "Login Successful",
-            userdata:{id: user._id,}});
-
-    }catch(error){
-        return res.json({success: false, message: error.message});
+        return res.json({ success: true, message: "Login Successful", token });
+    } catch (error) {
+        console.error("Error during login:", error.message);
+        return res.json({ success: false, message: error.message });
     }
-    
-}    
+};
 
-//Logout
+// Logout
 export const logout = (req, res) => {
-    try{
-        res.clearCookie("token",{
+    try {
+        res.clearCookie("token", {
             secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         });
-        return res.json({success: true, message: "Logged Out"});
-
-    } catch(error){
-        return res.json({success: false, message: error.message});
+        return res.json({ success: true, message: "Logged Out" });
+    } catch (error) {
+        console.error("Error during logout:", error.message);
+        return res.json({ success: false, message: error.message });
     }
-} 
+};
 
-//send OTP to email
+// Send OTP to email
 export const sendVerifyOtp = async (req, res) => {
     try {
-        // Extract userId from request
         const userId = req.userId; // From middleware like userAuth
 
-        console.log("User ID received:", userId); // Debugging log
-
-        // Validate userId
-        if (!userId) {
-            return res.json({ success: false, message: "User ID is required" });
+        if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+            return res.json({ success: false, message: "Invalid or missing User ID" });
         }
 
-        // Check if userId is a valid MongoDB ObjectId
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            return res.json({ success: false, message: "Invalid User ID" });
-        }
-
-        // Find the user in the database
         const user = await userModel.findById(userId);
         if (!user) {
             return res.json({ success: false, message: "User not found" });
         }
 
-        // Check if the account is already verified
         if (user.isAccountVerified) {
             return res.json({ success: false, message: "Account already verified" });
         }
 
-        // Generate OTP
         const otp = String(Math.floor(100000 + Math.random() * 900000));
         user.verifyOtp = otp;
-        user.verifyOtpExpires = Date.now() + 24 * 60 * 60 * 1000; // Expiry time: 24 hours
+        user.verifyOtpExpires = Date.now() + 24 * 60 * 60 * 1000;
 
-        // Save the OTP to the database
         await user.save();
 
-        // Send email with OTP
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: "Account Verification OTP",
-            text: `Your OTP for account verification is ${otp}. Please verify within 24 hours.`
+            text: `Your OTP for account verification is ${otp}. Please verify within 24 hours.`,
         };
 
         try {
             await transporter.sendMail(mailOptions);
             return res.json({ success: true, message: "OTP sent successfully" });
-        } catch (emailError) {
-            console.error("Error sending email:", emailError);
+        } catch (error) {
+            console.error("Error sending OTP email:", error.message);
             return res.json({ success: false, message: "Failed to send OTP email" });
         }
     } catch (error) {
-        console.error("Error in sendVerifyOtp:", error);
+        console.error("Error in sendVerifyOtp:", error.message);
         return res.json({ success: false, message: "An error occurred while processing your request" });
     }
 };
+
 
 // Verify email with OTP
 export const verifyemail = async (req, res) => {
@@ -346,5 +324,57 @@ export const adminLogin = async (req, res) => {
     } catch (error) {
         console.error("Error during admin login:", error);
         return res.json({ success: false, message: "An error occurred during admin login" });
+    }
+};
+
+//Admin otp verification 
+
+export const adminVerifyOtp = async (req, res) => {
+    const { email, otp } = req.body;
+
+    // Validate inputs
+    if (!email || !otp) {
+        return res.status(400).json({ success: false, message: "Email and OTP are required" });
+    }
+
+    try {
+        // Find the admin user by email
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Admin not found" });
+        }
+
+        // Check if the user is an admin
+        if (!user.isAdmin) {
+            return res.status(403).json({ success: false, message: "Access denied. Not an admin account." });
+        }
+
+        // Verify OTP
+        if (user.verifyOtp !== otp || !user.verifyOtp) {
+            return res.status(400).json({ success: false, message: "Invalid OTP" });
+        }
+
+        // Check if OTP has expired
+        if (user.verifyOtpExpires < Date.now()) {
+            return res.status(400).json({ success: false, message: "OTP has expired" });
+        }
+
+        // Clear OTP fields after successful verification
+        user.verifyOtp = null;
+        user.verifyOtpExpires = null;
+        await user.save();
+
+        // Generate a new JWT token for the admin
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+        return res.status(200).json({
+            success: true,
+            message: "Admin OTP verified successfully. Login complete.",
+            token,
+        });
+    } catch (error) {
+        console.error("Error during admin OTP verification:", error);
+        return res.status(500).json({ success: false, message: "An error occurred during OTP verification" });
     }
 };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { adminLogin, isAuthenticated, login, logout, register, resetPassword, sendResetOtp, sendVerifyOtp, verifyemail } from '../controllers/authController.js';
+import { adminLogin, adminVerifyOtp, isAuthenticated, login, logout, register, resetPassword, sendResetOtp, sendVerifyOtp, verifyemail } from '../controllers/authController.js';
 import userAuth from '../middleware/userAuth.js';
 
 const authRouter = express.Router();
@@ -13,5 +13,7 @@ authRouter.post('/is-auth', userAuth, isAuthenticated);
 authRouter.post('/send-reset-otp',  sendResetOtp);
 authRouter.post('/reset-password',  resetPassword);
 authRouter.post('/admin',  adminLogin);
+authRouter.post('/admin-otp',  adminVerifyOtp);
+
 
 export default authRouter;
