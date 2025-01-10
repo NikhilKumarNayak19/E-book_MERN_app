@@ -7,6 +7,7 @@ import connectDB from "./config/mongodb.js";
 import authRouter from './routes/authRoutes.js';
 import userRouter from "./routes/userRoutes.js";
 import resourceRouter from "./routes/resource.js";
+import readLaterRouter from "./routes/readLaterRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 3000
@@ -23,6 +24,7 @@ app.get('/', (req, res)=> res.send("API is running "))
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/resource', resourceRouter );
+app.use('/api/readlater', readLaterRouter  );
 
 app.listen(port, ()=> console.log(`Server is running on port: ${port}`));
 
