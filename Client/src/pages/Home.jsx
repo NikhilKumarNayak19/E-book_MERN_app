@@ -1,17 +1,12 @@
-import React from 'react'
-import Hero from '../components/Home/Hero'
+//import React from 'react'
+import Body from "../components/home/body"
 
 const Home = () => {
   return (
-    <div style={{
-        display: "flex",
-        backgroundColor: "#18181b", // Zinc 900 in Tailwind
-        color: "white",
-        padding: "32px 40px", // py-8 and px-10
-     }}
-      >
-        <Hero />
-      </div>
+    <div 
+    className="bg-zinc-900 text-white px-10 py-8" >
+      <Body />
+    </div>
   )
 }
 
