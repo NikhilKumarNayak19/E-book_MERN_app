@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import { use } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,27 +8,14 @@ const Navbar = () => {
   const links = [
     { title: "Home", link: "/" },
     { title: "Resources", link: "/resources" },
-    { title: "Contact Us", link: "/contact-us" },
     { title: "Profile", link: "/profile" },
-    { title: "Admin Profile", link: "/profile" },
+    { title: "Contact Us", link: "/contact-us" },
   ];
 
-  const isLoggedIn= useSelector((state) => state.auth.isLoggedIn);
-  const role = useSelector((state) => state.auth.role);
-  if (isLoggedIn === false) (
-    links.splice(2, 2)
-  )
-  if (isLoggedIn === true && role === "user") (
-    links.splice(4, 1)
-  )
-  if (isLoggedIn === true && role === "admin") (
-    links.splice(3, 1)
-  )
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const [MobileNav, setMobileNav] = useState("hidden");
   return (
     <div className="bg-zinc-800 text-white px-8 py-4">
       {/* Top Bar */}
@@ -41,11 +27,8 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="nav-links-LegalReads block md:flex items -center gap-4"></div>
         <div className="hidden lg:flex gap-6">
           {links.map((item, i) => (
-            <div className = "flex items-center">
-              {item.title === "Profile" || item.title === "Admin Profile" ? (
             <Link
               to={item.link}
               className="hover:text-blue-500 transition-all duration-300"
@@ -93,17 +76,16 @@ const Navbar = () => {
                 {item.title}
               </Link>
             ))}
-            {/* Login and Sign Up */}
             <Link
               to="/login"
-              className="w-40 self-center px-4 py-2 border border-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300"
+              className="px-4 py-2 border border-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300"
               onClick={toggleMenu}
             >
               Log In
             </Link>
             <Link
               to="/signup"
-              className="w-40 self-center px-4 py-2 bg-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300"
+              className="px-4 py-2 bg-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300"
               onClick={toggleMenu}
             >
               Sign Up
