@@ -76,20 +76,24 @@ const Navbar = () => {
                 {item.title}
               </Link>
             ))}
-            <Link
-              to="/login"
-              className="px-4 py-2 border border-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300"
-              onClick={toggleMenu}
-            >
-              Log In
-            </Link>
-            <Link
-              to="/signup"
-              className="px-4 py-2 bg-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300"
-              onClick={toggleMenu}
-            >
-              Sign Up
-            </Link>
+
+            {/* Log In and Sign Up Buttons */}
+            <div className="flex flex-col gap-2 items-center">
+              <Link
+                to="/login"
+                className="w-full max-w-xs px-4 py-2 border border-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300 text-center"
+                onClick={toggleMenu}
+              >
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                className="w-full max-w-xs px-4 py-2 bg-blue-500 rounded hover:bg-white hover:text-zinc-800 duration-300 text-center"
+                onClick={toggleMenu}
+              >
+                Sign Up
+              </Link>
+            </div>
           </div>
         </div>
       )}

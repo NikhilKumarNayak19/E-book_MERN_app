@@ -218,7 +218,7 @@ export const getRecentlyAddedResources = async (req, res) => {
         const resources = await resourceModel
             .find()
             .sort({ createdAt: -1 }) // Sort by creation date in descending order
-            .limit(5); // Limit the results to 5
+            .limit(4); // Limit the results to 5
 
         return res.json({
             status: "Success",
