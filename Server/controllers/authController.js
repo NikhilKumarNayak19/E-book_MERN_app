@@ -9,13 +9,13 @@ export const register = async (req, res) => {
     const { name, email, password, isAdmin } = req.body;
 
     if (!name || !email || !password) {
-        return res.json({ success: false, message: "Missing Details" });
+        return res.status(400).json({ success: false, message: "Missing Details" });
     }
 
     try {
         const existingUser = await userModel.findOne({ email });
         if (existingUser) {
-            return res.json({ success: false, message: "User already exists" });
+            return res.status(400).json({ success: false, message: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -46,49 +46,63 @@ export const register = async (req, res) => {
             console.log('Email sent successfully');
         } catch (error) {
             console.error('Error sending email:', error.message);
-            return res.json({ success: false, message: "Registration successful, but email sending failed." });
+            return res.status(500).json({ success: false, message: "Registration successful, but email sending failed." });
         }
 
-        return res.json({ success: true, message: "User registered successfully", token });
+        return res.status(201).json({ success: true, message: "User registered successfully", token });
     } catch (error) {
         console.error("Error during registration:", error.message);
-        return res.json({ success: false, message: "Error in registration", error: error.message });
+        return res.status(500).json({ success: false, message: "Error in registration", error: error.message });
     }
 };
 
 // Login
 export const login = async (req, res) => {
     const { email, password } = req.body;
+
+    // Check for missing fields
     if (!email || !password) {
-        return res.json({ success: false, message: "Email and Password are required" });
+        return res.status(400).json({ success: false, message: "Email and Password are required" });
     }
 
     try {
+        // Find the user by email
         const user = await userModel.findOne({ email });
         if (!user) {
-            return res.json({ success: false, message: "Invalid Email or Password" });
+            return res.status(401).json({ success: false, message: "Invalid Email or Password" });
         }
 
+        // Verify the password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.json({ success: false, message: "Invalid Email or Password" });
+            return res.status(401).json({ success: false, message: "Invalid Email or Password" });
         }
 
+        // Generate a JWT token
         const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
+        // Set the token in a cookie
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
-        return res.json({ success: true, message: "Login Successful", token });
+        // Respond with success and include the user ID
+        return res.status(200).json({
+            success: true,
+            message: "Login Successful",
+            token,
+            id: user._id, // Include user ID in the response
+        });
     } catch (error) {
         console.error("Error during login:", error.message);
-        return res.json({ success: false, message: error.message });
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+
+
 
 // Logout
 export const logout = (req, res) => {
@@ -378,3 +392,42 @@ export const adminVerifyOtp = async (req, res) => {
         return res.status(500).json({ success: false, message: "An error occurred during OTP verification" });
     }
 };
+
+
+// Fetch User Data by ID
+export const getUserById = async (req, res) => {
+    const userId = req.headers.id; // Extract 'id' from headers
+  
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+  
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid User ID" });
+    }
+  
+    try {
+      const user = await userModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        userData: {
+          avatar: user.avatar,
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          isAccountVerified: user.isAccountVerified,
+          history: user.history,
+          readLater: user.readLater,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching user data:", error.message);
+      return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  };
