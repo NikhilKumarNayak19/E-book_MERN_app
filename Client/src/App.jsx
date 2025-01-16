@@ -14,6 +14,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AddResources from './pages/AddResources';
 import UpdateResources from './pages/UpdateResources';
 import RemoveResources from './pages/RemoveResources';
+import ViewAllResources from './pages/ViewAllResources';
 
 const App = () => {
   const location = useLocation();
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/admin-dashboard/add-resource" element={<AddResources />} />
           <Route path="admin-dashboard/update-resource" element={<UpdateResources />} />
           <Route path="admin-dashboard/delete-resource" element={<RemoveResources />} />
+          <Route path="admin-dashboard" element={<ViewAllResources />} />
           <Route
             path="*"
             element={
