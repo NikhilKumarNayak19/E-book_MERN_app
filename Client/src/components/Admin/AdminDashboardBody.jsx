@@ -18,7 +18,7 @@ const AdminDashboard = () => {
         }
 
         // Fetch admin data from the API
-        const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
+        const response = await axios.get("http://localhost:3000/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
           },
@@ -72,12 +72,6 @@ const AdminDashboard = () => {
         {/* Sidebar Options */}
         <nav className="flex flex-col w-full">
           <Link
-            to="/admin-dashboard"
-            className="text-lg py-2 px-4 hover:bg-zinc-700 rounded transition-all duration-300"
-          >
-            View All Resources
-          </Link>
-          <Link
             to="/admin-dashboard/add-resource"
             className="text-lg py-2 px-4 hover:bg-zinc-700 rounded transition-all duration-300"
           >
@@ -121,31 +115,16 @@ const AdminDashboard = () => {
       </div>
       {/* Main Content */}
       <div className="lg:w-3/4 p-8">
-        <h1 className="text-3xl font-bold text-yellow-400 mb-6">All Resources</h1>
-        <table className="w-full bg-zinc-800 border border-gray-700 rounded text-left">
-          <thead>
-            <tr className="text-yellow-400">
-              <th className="py-2 px-4 border-b border-gray-700">Sr.</th>
-              <th className="py-2 px-4 border-b border-gray-700">Resources</th>
-              <th className="py-2 px-4 border-b border-gray-700">Description</th>
-              <th className="py-2 px-4 border-b border-gray-700">Status</th>
-              <th className="py-2 px-4 border-b border-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="py-2 px-4 border-b border-gray-700">1</td>
-              <td className="py-2 px-4 border-b border-gray-700">Name</td>
-              <td className="py-2 px-4 border-b border-gray-700">abc</td>
-              <td className="py-2 px-4 border-b border-gray-700">
-                downloaded/reading online
-              </td>
-              <td className="py-2 px-4 border-b border-gray-700">
-                <button className="text-blue-500 hover:underline">View</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <h1 className="text-3xl font-bold text-yellow-400 mb-6">Welcome to Admin Dashboard</h1>
+        <p className="text-xl text-gray-300 mb-4">As an admin, you can manage resources and users. Here’s what you can do:</p>
+        <ul className="list-disc pl-6 text-gray-300">
+          <li>Add new resources</li>
+          <li>Update existing resources</li>
+          <li>Delete resources</li>
+          <li>View all users</li>
+          <li>Send emails to users</li>
+        </ul>
+        <p className="text-lg text-gray-400 mt-4">Please use the navigation links in the sidebar to manage the system.</p>
       </div>
     </div>
   );

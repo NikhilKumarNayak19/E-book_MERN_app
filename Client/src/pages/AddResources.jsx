@@ -1,139 +1,159 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
 const AddResources = () => {
   const [data, setData] = useState({
-    url: '',
-    title: '',
-    author: '',
-    language: '',
-    desc: '',
+    url: "",
+    title: "",
+    author: "",
+    desc: "",
+    category: "Book",
   });
 
   const headers = {
-    id: localStorage.getItem('id'),
-    authorization: `Bearer ${localStorage.getItem('token')}`,
+    id: localStorage.getItem("id"),
+    authorization: `Bearer ${localStorage.getItem("token")}`,
   };
 
-  const Change = (e) => {
+  const categories = [
+    "Book",
+    "Document",
+    "Court Hearing",
+    "Case Study",
+    "Newspaper",
+  ];
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
 
-  const submit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       if (
-        data.url === '' ||
-        data.title === '' ||
-        data.author === '' ||
-        data.language === '' ||
-        data.desc === ''
+        !data.url ||
+        !data.title ||
+        !data.author ||
+        !data.desc ||
+        !data.category
       ) {
-        alert('All fields are required');
+        alert("All fields are required");
         return;
       }
 
       // Make API request
       const response = await axios.post(
-        '/api/add-resource',
+        "http://localhost:3000/api/resource/add-resource",
         { ...data },
         { headers }
       );
 
       if (response.status === 200) {
-        alert('Resource added successfully!');
+        alert("Resource added successfully!");
         setData({
-          url: '',
-          title: '',
-          author: '',
-          language: '',
-          desc: '',
+          url: "",
+          title: "",
+          author: "",
+          desc: "",
+          category: "Book",
         });
       }
     } catch (error) {
-      alert('An error occurred while adding the resource.');
+      alert("An error occurred while adding the resource.");
     }
   };
 
   return (
-    <div className="h-[100%] p-0 md:p-4">
-      <h1 className="text-3xl md:text-5xl font-semibold text-zinc-500 mb-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 p-4">
+      <h1 className="text-4xl font-bold text-yellow-100 mb-8">
         Add Resources
       </h1>
-      <div className="p-4 bg-zinc-800 rounded">
-        <div>
-          <label htmlFor="" className="text-zinc-400">
-            Image
+      <form
+        className="w-full max-w-lg bg-gray-800 p-6 rounded-lg shadow-lg"
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-4">
+          <label htmlFor="url" className="block text-gray-300 font-medium">
+            Image URL
           </label>
           <input
             type="text"
             name="url"
             value={data.url}
-            onChange={Change}
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="URL of image"
+            onChange={handleChange}
+            className="w-full mt-2 p-2 bg-gray-700 text-gray-100 rounded focus:outline-none focus:ring focus:ring-yellow-400"
+            placeholder="Enter image URL"
           />
         </div>
-        <div className="mt-4">
-          <label htmlFor="" className="text-zinc-400">
-            Title of Book
+
+        <div className="mb-4">
+          <label htmlFor="title" className="block text-gray-300 font-medium">
+            Title
           </label>
           <input
             type="text"
             name="title"
             value={data.title}
-            onChange={Change}
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="Title of book"
+            onChange={handleChange}
+            className="w-full mt-2 p-2 bg-gray-700 text-gray-100 rounded focus:outline-none focus:ring focus:ring-yellow-400"
+            placeholder="Enter title"
           />
         </div>
-        <div className="mt-4">
-          <label htmlFor="" className="text-zinc-400">
-            Author of Book
+
+        <div className="mb-4">
+          <label htmlFor="author" className="block text-gray-300 font-medium">
+            Author
           </label>
           <input
             type="text"
             name="author"
             value={data.author}
-            onChange={Change}
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="Author of book"
+            onChange={handleChange}
+            className="w-full mt-2 p-2 bg-gray-700 text-gray-100 rounded focus:outline-none focus:ring focus:ring-yellow-400"
+            placeholder="Enter author name"
           />
         </div>
-        <div className="mt-4">
-          <label htmlFor="" className="text-zinc-400">
-            Language
+
+        <div className="mb-4">
+          <label htmlFor="desc" className="block text-gray-300 font-medium">
+            Description
           </label>
-          <input
-            type="text"
-            name="language"
-            value={data.language}
-            onChange={Change}
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="Language of book"
-          />
-        </div>
-        <div className="mt-4">
-          <label htmlFor="" className="text-zinc-400">
-            Description of Book
-          </label>
-          <input
-            type="text"
+          <textarea
             name="desc"
             value={data.desc}
-            onChange={Change}
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="Description of book"
-          />
+            onChange={handleChange}
+            className="w-full mt-2 p-2 bg-gray-700 text-gray-100 rounded focus:outline-none focus:ring focus:ring-yellow-400"
+            placeholder="Enter a description"
+            rows="4"
+          ></textarea>
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-gray-300 font-medium">
+            Category
+          </label>
+          <select
+            name="category"
+            value={data.category}
+            onChange={handleChange}
+            className="w-full mt-2 p-2 bg-gray-700 text-gray-100 rounded focus:outline-none focus:ring focus:ring-yellow-400"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button
-          className="mt-4 px-3 bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition-all duration-300"
-          onClick={submit}
+          type="submit"
+          className="w-full bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded hover:bg-yellow-600 transition-all duration-300"
         >
-          Add Resources
+          Add Resource
         </button>
-      </div>
+      </form>
     </div>
   );
 };

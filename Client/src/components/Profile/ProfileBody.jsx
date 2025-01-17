@@ -3,6 +3,7 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 import Settings from "./settings"; // Import Settings component
 import UnderConstruction from "../UnderConstruction";
+import ReadLater from "./ReadLater.jsx"; // Import ReadLater component
 
 const ProfileBody = () => {
   const [userData, setUserData] = useState(null);
@@ -19,7 +20,7 @@ const ProfileBody = () => {
           return;
         }
 
-        const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
+        const response = await axios.get("http://localhost:3000/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -58,12 +59,16 @@ const ProfileBody = () => {
                 <p className="text-md lg:text-lg text-zinc-300">
                   {userData?.email}
                 </p>
+                {/* Display User ID */}
+                <p className="text-md lg:text-lg text-zinc-300">
+                  User ID: {userData?.id}
+                </p>
               </div>
             </div>
           </div>
         );
       case "readLater":
-        return <UnderConstruction />; // Render UnderConstruction for Read Later
+        return <ReadLater />;  // Return the ReadLater component
       case "downloads":
         return <UnderConstruction />; // Render UnderConstruction for Downloads
       case "settings":
@@ -97,7 +102,7 @@ const ProfileBody = () => {
     <div className="flex flex-col lg:flex-row min-h-screen bg-zinc-900 text-white">
       {/* Sidebar */}
       <div
-        className="w-full lg:w-1/4 bg-zinc-800 p-4 flex flex-col"
+        className="w-full lg:w-1/4 bg-zinc-800 p-4 flex flex-col h-screen"
         style={{ transition: "all 0.3s ease" }}
       >
         <Sidebar setActiveSection={setActiveSection} />
@@ -105,7 +110,7 @@ const ProfileBody = () => {
 
       {/* Main Content */}
       <div
-        className="w-full lg:w-3/4 p-4 lg:p-8"
+        className="w-full lg:w-3/4 p-4 lg:p-8 overflow-auto"
         style={{
           transition: "all 0.3s ease",
         }}

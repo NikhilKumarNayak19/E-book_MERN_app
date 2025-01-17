@@ -30,7 +30,7 @@ const SignUpBody = () => {
         return;
       }
 
-      const response = await axios.post("https://e-book-mern-app.onrender.com/api/auth/register", {
+      const response = await axios.post("http://localhost:3000/api/auth/register", {
         name: values.name,
         email: values.email,
         password: values.password,

@@ -17,7 +17,7 @@ const Sidebar = () => {
           throw new Error("Authorization headers are missing.");
         }
 
-        const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
+        const response = await axios.get("http://localhost:3000/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`, // Pass token as Authorization header
             id: userId, // Pass user ID as custom header
@@ -59,7 +59,7 @@ const Sidebar = () => {
         <div className="w-full mt-4 h-[1px] bg-zinc-500 hidden lg:block"></div>
       </div>
 
-      <div className="w-full flex lg:hidden items-center justify-between mt-4">
+      <div className="w-full flex lg:flex-col items-center justify-between mt-4">
         <Link
           to="/profile"
           className="text-zinc-100 font-semibold w-full text-center hover:bg-zinc-900 rounded transition-all duration-300 py-2"
@@ -67,7 +67,7 @@ const Sidebar = () => {
           All Resources
         </Link>
         <Link
-          to="/profile/add-resources"
+          to="/admin-dashboard/add-resource"
           className="text-zinc-100 font-semibold w-full text-center hover:bg-zinc-900 rounded transition-all duration-300 py-2"
         >
           Add Resources

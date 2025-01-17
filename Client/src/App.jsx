@@ -11,6 +11,10 @@ import Admin from './pages/Admin'; // Import the Admin page
 import { Routes, Route, useLocation } from "react-router-dom";
 import ViewResources from './components/viewResources/ViewResources';
 import AdminDashboard from './pages/AdminDashboard';
+import AddResources from './pages/AddResources';
+import UpdateResources from './pages/UpdateResources';
+import RemoveResources from './pages/RemoveResources';
+import ViewAllResources from './pages/ViewAllResources';
 
 const App = () => {
   const location = useLocation();
@@ -33,6 +37,10 @@ const App = () => {
           <Route path="/admin" element={<Admin />} /> {/* Admin route added */}
           <Route path="/admin-dashboard" element={<AdminDashboard />} /> {/* Admin Dashboard route */}
           <Route path="view-resource-details/:id" element={<ViewResources />} />
+          <Route path="/admin-dashboard/add-resource" element={<AddResources />} />
+          <Route path="admin-dashboard/update-resource" element={<UpdateResources />} />
+          <Route path="admin-dashboard/delete-resource" element={<RemoveResources />} />
+          <Route path="admin-dashboard" element={<ViewAllResources />} />
           <Route
             path="*"
             element={
