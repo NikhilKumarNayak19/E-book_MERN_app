@@ -19,7 +19,7 @@ const AdminLogin = () => {
         return;
       }
 
-      const response = await axios.post("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/auth/admin", {
+      const response = await axios.post("https://e-book-mern-app.onrender.com/api/auth/admin", {
         email,
         password,
       });
@@ -49,7 +49,7 @@ const AdminLogin = () => {
         return;
       }
 
-      const response = await axios.post("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/auth/admin-otp", {
+      const response = await axios.post("https://e-book-mern-app.onrender.com/api/auth/admin-otp", {
         email,
         otp,
       });

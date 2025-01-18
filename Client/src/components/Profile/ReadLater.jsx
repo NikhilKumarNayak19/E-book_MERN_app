@@ -18,7 +18,7 @@ const ReadLater = () => {
           setError(true);
           return;
         }
-        const response = await axios.get("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/user/data", {
+        const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -45,7 +45,7 @@ const ReadLater = () => {
 
       try {
         const response = await axios.get(
-          "https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/readlater/fetch-all-resource-from-read-later",
+          "https://e-book-mern-app.onrender.com/api/readlater/fetch-all-resource-from-read-later",
           { headers }
         );
         setReadLaterResources(response.data.data); 

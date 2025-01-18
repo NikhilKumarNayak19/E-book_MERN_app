@@ -17,7 +17,7 @@ const Sidebar = () => {
           throw new Error("Authorization headers are missing.");
         }
 
-        const response = await axios.get("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/user/data", {
+        const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`, // Pass token as Authorization header
             id: userId, // Pass user ID as custom header

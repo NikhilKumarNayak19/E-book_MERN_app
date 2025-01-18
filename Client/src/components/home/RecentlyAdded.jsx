@@ -11,7 +11,7 @@ const RecentlyAdded = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/get-recently-added-resource"
+          "https://e-book-mern-app.onrender.com/api/resource/get-recently-added-resource"
         );
         setData(response.data.data);
       } catch (error) {

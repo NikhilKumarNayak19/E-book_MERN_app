@@ -44,7 +44,7 @@ const AddResources = () => {
 
       // Make API request
       const response = await axios.post(
-        "https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/add-resource",
+        "https://e-book-mern-app.onrender.com/api/resource/add-resource",
         { ...data },
         { headers }
       );
