@@ -20,7 +20,7 @@ const ProfileBody = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:3000/api/user/data", {
+        const response = await axios.get("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

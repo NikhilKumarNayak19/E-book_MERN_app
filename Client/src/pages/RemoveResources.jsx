@@ -16,7 +16,7 @@ const RemoveResources = () => {
     const fetchResources = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/resource/get-all-resource",
+          "https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/get-all-resource",
           { headers }
         );
 
@@ -47,7 +47,7 @@ const RemoveResources = () => {
     try {
       // Assuming that the API expects a POST request to delete the resource
       const response = await axios.post(
-        "http://localhost:3000/api/resource/delete-resource", // URL for POST
+        "https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/delete-resource", // URL for POST
         { id: selectedResource._id }, // Pass the resource ID in the request body
         { headers } // Include the necessary headers
       );

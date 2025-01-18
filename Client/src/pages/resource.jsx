@@ -17,7 +17,7 @@ const Resource = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/resource/get-all-resource");
+        const response = await axios.get("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/get-all-resource");
         setData(response.data.data);
         setFilteredData(response.data.data); // Set initial filtered data
         console.log("Fetched All Data:", response.data.data); // Debug fetched data
@@ -38,11 +38,11 @@ const Resource = () => {
 
       if (category === "All") {
         // Fetch all resources if "All" is selected
-        const response = await axios.get("http://localhost:3000/api/resource/get-all-resource");
+        const response = await axios.get("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/get-all-resource");
         setFilteredData(response.data.data);
       } else {
         // Fetch resources for the selected category
-        const response = await axios.post("http://localhost:3000/api/resource/category", {
+        const response = await axios.post("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/category", {
           category,
         });
         setFilteredData(response.data.data);

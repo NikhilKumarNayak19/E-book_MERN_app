@@ -25,7 +25,7 @@ const UpdateResources = () => {
     const fetchResources = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/resource/get-all-resource",
+          "https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/get-all-resource",
           { headers }
         );
         if (response.data && Array.isArray(response.data.data)) {
@@ -65,7 +65,7 @@ const UpdateResources = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/resource/update-resource/${selectedResource._id}`,
+        `https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resource/update-resource/${selectedResource._id}`,
         { ...data },
         { headers }
       );

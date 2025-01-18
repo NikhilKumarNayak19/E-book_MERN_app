@@ -10,7 +10,7 @@ const ViewAllResources = () => {
     const fetchResources = async () => {
       try {
         // Fetch resources from the API
-        const response = await axios.get("http://localhost:3000/api/resources");
+        const response = await axios.get("https://vercel.com/akarshan-ghoshs-projects/e-book-mern-app/api/resources");
         setResources(response.data); // Assuming response.data contains an array of resources
       } catch (err) {
         console.error("Error fetching resources:", err);
