@@ -89,7 +89,7 @@ const ReadLater = () => {
               />
               <h5 className="text-xl text-white font-semibold mt-4">{resource.title}</h5>
               <p className="text-sm text-zinc-400 mt-2">
-                {resource.description || "No description available"}
+                {resource.desc|| "No description available"}
               </p>
             </div>
           ))
