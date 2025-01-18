@@ -20,7 +20,7 @@ const ViewResources = () => {
       try {
         const token = sessionStorage.getItem("token");
         if (token) {
-          const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
+          const response = await axios.get("http://localhost:3000/api/user/data", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -36,7 +36,7 @@ const ViewResources = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://e-book-mern-app.onrender.com/api/resource/get-resource-by-id/${id}`
+          `http://localhost:3000/api/resource/get-resource-by-id/${id}`
         );
         setData(response.data.data);
       } catch (error) {
@@ -62,7 +62,7 @@ const ViewResources = () => {
   const handleReadLater = async () => {
     try {
       const response = await axios.put(
-        "https://e-book-mern-app.onrender.com/api/readlater/add-resource-to-read-later",
+        "http://localhost:3000/api/readlater/add-resource-to-read-later",
         {},
         { headers }
       );
@@ -75,7 +75,7 @@ const ViewResources = () => {
   const handleRemoveFromReadLater = async () => {
     try {
       const response = await axios.put(
-        "https://e-book-mern-app.onrender.com/api/readlater/remove-resource-from-read-later",
+        "http://localhost:3000/api/readlater/remove-resource-from-read-later",
         {},
         { headers }
       );

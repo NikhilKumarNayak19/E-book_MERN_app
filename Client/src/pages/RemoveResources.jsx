@@ -16,7 +16,7 @@ const RemoveResources = () => {
     const fetchResources = async () => {
       try {
         const response = await axios.get(
-          "https://e-book-mern-app.onrender.com/api/resource/get-all-resource",
+          "http://localhost:3000/api/resource/get-all-resource",
           { headers }
         );
 
@@ -47,7 +47,7 @@ const RemoveResources = () => {
     try {
       // Assuming that the API expects a POST request to delete the resource
       const response = await axios.post(
-        "https://e-book-mern-app.onrender.com/api/resource/delete-resource", // URL for POST
+        "http://localhost:3000/api/resource/delete-resource", // URL for POST
         { id: selectedResource._id }, // Pass the resource ID in the request body
         { headers } // Include the necessary headers
       );

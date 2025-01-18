@@ -25,7 +25,7 @@ const UpdateResources = () => {
     const fetchResources = async () => {
       try {
         const response = await axios.get(
-          "https://e-book-mern-app.onrender.com/api/resource/get-all-resource",
+          "http://localhost:3000/api/resource/get-all-resource",
           { headers }
         );
         if (response.data && Array.isArray(response.data.data)) {
@@ -65,7 +65,7 @@ const UpdateResources = () => {
 
     try {
       const response = await axios.put(
-        `https://e-book-mern-app.onrender.com/api/resource/update-resource/${selectedResource._id}`,
+        `http://localhost:3000/api/resource/update-resource/${selectedResource._id}`,
         { ...data },
         { headers }
       );

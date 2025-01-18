@@ -18,7 +18,7 @@ const ReadLater = () => {
           setError(true);
           return;
         }
-        const response = await axios.get("https://e-book-mern-app.onrender.com/api/user/data", {
+        const response = await axios.get("http://localhost:3000/api/user/data", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -45,7 +45,7 @@ const ReadLater = () => {
 
       try {
         const response = await axios.get(
-          "https://e-book-mern-app.onrender.com/api/readlater/fetch-all-resource-from-read-later",
+          "http://localhost:3000/api/readlater/fetch-all-resource-from-read-later",
           { headers }
         );
         setReadLaterResources(response.data.data); 

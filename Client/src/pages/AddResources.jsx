@@ -44,7 +44,7 @@ const AddResources = () => {
 
       // Make API request
       const response = await axios.post(
-        "https://e-book-mern-app.onrender.com/api/resource/add-resource",
+        "http://localhost:3000/api/resource/add-resource",
         { ...data },
         { headers }
       );

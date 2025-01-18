@@ -10,7 +10,7 @@ const ForgetPassword = () => {
 
   const handleSendOtp = async () => {
     try {
-      const response = await axios.post("https://e-book-mern-app.onrender.com/api/auth/send-reset-otp", { email });
+      const response = await axios.post("http://localhost:3000/api/auth/send-reset-otp", { email });
       if (response.data.success) {
         setMessage("OTP sent to your email.");
         setStep(2); // Move to the OTP verification step
@@ -24,7 +24,7 @@ const ForgetPassword = () => {
 
   const handleVerifyOtpAndResetPassword = async () => {
     try {
-      const response = await axios.post("https://e-book-mern-app.onrender.com/api/auth/reset-password", {
+      const response = await axios.post("http://localhost:3000/api/auth/reset-password", {
         email,
         otp,
         newPassword,
